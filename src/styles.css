@@ -1,0 +1,45 @@
+
+.debug {
+    border: 2px solid blue;
+}
+
+.debug2 {
+    border: 2px solid red;
+}
+
+.debug3 {
+    border: 4px solid green;
+}
+
+body {
+    background: #c2c2d6;
+    text-align: center;
+}
+
+.setSessionBreak button {
+    width: 2rem;
+    height: 1rem;
+}
+
+button:hover {
+    color: black;
+    outline: 0.05em solid grey;
+    z-index: 3;
+  }
+
+#clockBody {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.timeSetting {
+    display: flex;
+
+}
+
+
+
+
