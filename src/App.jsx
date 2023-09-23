@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef} from 'react'
 import './styles.css'
 
+
 function App() {
   //useRef - is it currently break or session
   // const isBreakTime = useRef(false)
@@ -9,7 +10,7 @@ function App() {
   const [timerOn, setTimer] = useState(false)
   //useRef - ID so that setInterval can be cleared
   const intervalID = useRef()
-  const [type, setType] = useState('Study Time')
+  const [type, setType] = useState('Session')
 
   //useState: user set session length, cannot be adjusted when timer is on. if adjusted during a paused session,  the session countdown timer is reset to new length
   const [sessionLength, setSessionLength] = useState('25')
@@ -49,7 +50,7 @@ function App() {
   function sessionCountDown() {
       switch (secondsRemainingRef.current) {
         case 60:
-            setDisplayMinutes((prevState) => (parseInt(prevState)-1).toString())
+            setDisplayMinutes((prevState) => (parseInt(prevState)-1).toString().padStart(2,'0'))
             console.log(minutesDisplay)
             sessionMinutesRemainingRef.current --;
             console.log(sessionMinutesRemainingRef.current)
@@ -59,11 +60,12 @@ function App() {
               console.log('a break is about to start') 
               //play audio
               const clip = document.getElementById('beep')
-              // clip.play();
-              setType('Break Time')
+              clip.play();
+              setType('Break')
               sessionMinutesRemainingRef.current = sessionLength;
               secondsRemainingRef.current = 60;
-              setDisplayMinutes(breakLength);      
+
+              setDisplayMinutes(breakLength.padStart(2,'0'));      
               console.log('settimeout is running')
               // isBreakTime.current = !isBreakTime.current
               setBreak(true) 
@@ -94,17 +96,19 @@ function App() {
   function breakCountDown() {
       switch (secondsRemainingRef.current) {
         case 60:
-            setDisplayMinutes((prevState) => (parseInt(prevState)-1).toString())
+            setDisplayMinutes((prevState) => (parseInt(prevState)-1).toString().padStart(2,'0'))
             // console.log(minutesDisplay)
             breakMinutesRemainingRef.current --;
             console.log(`breaMinutesRemainingRef: ${breakMinutesRemainingRef.current}`)
             // console.log(`minutes remaining: ${minutes}`)
             if (breakMinutesRemainingRef.current == -1) {
               console.log('a session is about to start');
-              setType('Study Time')
+              const clip = document.getElementById('beep')
+              clip.play();
+              setType('Session')
               breakMinutesRemainingRef.current = breakLength;
               secondsRemainingRef.current = 5;
-              setDisplayMinutes(sessionLength);
+              setDisplayMinutes(sessionLength.padStart(2,'0'));
               // isBreakTime.current = !isBreakTime.current
               setBreak(false)
               break;
@@ -139,8 +143,12 @@ function App() {
           a = parseInt(breakLength) + 1
           if (a < 61) {
             breakMinutesRemainingRef.current = a;
-            secondsRemainingRef.current = 60;
             setBreakLength(a.toString());
+            if(isBreakTime){
+              setDisplayMinutes(a.toString().padStart(2,'0'));
+              setDisplaySeconds('00');
+              secondsRemainingRef.current = 60;
+            }
           }
           break;
         case 'break-decrement':
@@ -148,8 +156,12 @@ function App() {
           a = parseInt(breakLength) - 1
           if (a > 0) {
             breakMinutesRemainingRef.current = a;
-            secondsRemainingRef.current = 60;
             setBreakLength(a.toString());
+            if(isBreakTime){
+              setDisplayMinutes(a.toString().padStart(2,'0'));
+              setDisplaySeconds('00');
+              secondsRemainingRef.current = 60;
+            }
           }
           break;
         case 'session-increment':
@@ -157,8 +169,12 @@ function App() {
         a = parseInt(sessionLength) + 1
         if (a < 61) {
           sessionMinutesRemainingRef.current = a;
-          secondsRemainingRef.current = 60;
           setSessionLength(a.toString());
+          if(!isBreakTime){
+            setDisplayMinutes(a.toString().padStart(2,'0'));
+            setDisplaySeconds('00');
+            secondsRemainingRef.current = 60;
+          }
         } 
         break;
         case 'session-decrement':
@@ -166,28 +182,30 @@ function App() {
           a = parseInt(sessionLength) - 1
           if (a > 0) {
             sessionMinutesRemainingRef.current = a;
-            secondsRemainingRef.current = 60;
             setSessionLength(a.toString());
+            if(!isBreakTime){
+              setDisplayMinutes(a.toString().padStart(2,'0'));
+              setDisplaySeconds('00');
+              secondsRemainingRef.current = 60;
+            }
           }
           break;
         }
-      if (isBreakTime==true) {        
-        setDisplayMinutes(breakMinutesRemainingRef.current);
-      } else {
-        setDisplayMinutes(sessionMinutesRemainingRef.current);
-      }
-      setDisplaySeconds('00');
       }
     }
   
     function reset() {
       setTimer(false);
       setBreak(false); 
-      setType('Study Time')
+      setType('Session')
       setBreakLength('5');
       setSessionLength('25');
       setDisplayMinutes('25');
       setDisplaySeconds('00');
+      const clip = document.getElementById('beep')
+      clip.pause();
+      clip.currentTime = 0;
+      document.getElementById('beep').currentTime = 0;
       breakMinutesRemainingRef.current = '5';
       sessionMinutesRemainingRef.current = '25';
       secondsRemainingRef.current = 60;
