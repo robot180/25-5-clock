@@ -1,5 +1,11 @@
 import { useState, useEffect, useRef} from 'react'
 import './styles.css'
+// import { library } from '@fortawesome/fontawesome-svg-core'
+// import { fab } from '@fortawesome/free-brands-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faCheckSquare, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons'
+// library.add(fab, faArrowUp, faArrowDown)
+import { FaArrowDown, FaArrowUp } from "react-icons/fa"
 
 
 function App() {
@@ -10,7 +16,7 @@ function App() {
   const [timerOn, setTimer] = useState(false)
   //useRef - ID so that setInterval can be cleared
   const intervalID = useRef()
-  const [type, setType] = useState('Session')
+  const [type, setType] = useState('Study')
 
   //useState: user set session length, cannot be adjusted when timer is on. if adjusted during a paused session,  the session countdown timer is reset to new length
   const [sessionLength, setSessionLength] = useState('25')
@@ -105,7 +111,7 @@ function App() {
               console.log('a session is about to start');
               const clip = document.getElementById('beep')
               clip.play();
-              setType('Session')
+              setType('Study')
               breakMinutesRemainingRef.current = breakLength;
               secondsRemainingRef.current = 5;
               setDisplayMinutes(sessionLength.padStart(2,'0'));
@@ -197,7 +203,7 @@ function App() {
     function reset() {
       setTimer(false);
       setBreak(false); 
-      setType('Session')
+      setType('Study')
       setBreakLength('5');
       setSessionLength('25');
       setDisplayMinutes('25');
@@ -216,21 +222,24 @@ function App() {
 
   return (
     <div id="clockBody">
-      <div>25 + 5 Clock</div>
-      <div>(Study Timer)</div>
-
-      <div className="timeSetting">
-        <div className="setSessionBreak">
-          <p id='break-label'>Break Time</p>
-          <button id="break-increment" onClick={changeLength}>u</button>
-          <button id="break-decrement" onClick={changeLength}>d</button>
-          <div className="" ><span id="break-length">{breakLength}</span>:00</div>
+      <h1>25 + 5 Clock</h1>
+      <h2>(Study Timer)</h2>
+      <div className="setSessionBreak debug">
+        <div>
+          <h4 id='break-label'>Break Length</h4>
+          <div>
+            <button id="break-increment" onClick={changeLength}><FaArrowUp /></button>
+            <span id="break-length">{breakLength}:00</span>
+            <button id="break-decrement" onClick={changeLength}><FaArrowDown /></button>
+          </div>
         </div>
-        <div className="setSessionBreak">
-          <p id='session-label'>Session Length</p>
-          <button id="session-increment" onClick={changeLength}>u</button>
-          <button id="session-decrement" onClick={changeLength}>d</button>
-          <div className=""><span id="session-length">{sessionLength}</span>:00</div>
+        <div>
+          <h4 id='session-label' className=''>Study Length</h4>
+          <div>
+            <button id="session-increment" className='' onClick={changeLength}><FaArrowUp /></button>
+            <span id="session-length">{sessionLength}:00</span>
+            <button id="session-decrement" onClick={changeLength}><FaArrowDown /></button>
+          </div>
         </div>
       </div>
       <div className="timer debug2" id="timer-label">Session: {type}</div>
