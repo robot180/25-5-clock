@@ -5,7 +5,7 @@ import './styles.css'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faCheckSquare, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons'
 // library.add(fab, faArrowUp, faArrowDown)
-import { FaArrowDown, FaArrowUp } from "react-icons/fa"
+import { FaArrowDown, FaArrowUp, FaFreeCodeCamp, FaPause, FaPlay, FaHistory } from "react-icons/fa"
 
 
 function App() {
@@ -224,12 +224,12 @@ function App() {
     <div id="clockBody">
       <h1>25 + 5 Clock</h1>
       <h2>(Study Timer)</h2>
-      <div className="setSessionBreak debug">
+      <div className="setSessionBreak ">
         <div>
           <h4 id='break-label'>Break Length</h4>
           <div>
             <button id="break-increment" onClick={changeLength}><FaArrowUp /></button>
-            <span id="break-length">{breakLength}:00</span>
+            <span id="break-length">{breakLength}</span><span>:00</span>
             <button id="break-decrement" onClick={changeLength}><FaArrowDown /></button>
           </div>
         </div>
@@ -237,21 +237,30 @@ function App() {
           <h4 id='session-label' className=''>Study Length</h4>
           <div>
             <button id="session-increment" className='' onClick={changeLength}><FaArrowUp /></button>
-            <span id="session-length">{sessionLength}:00</span>
+            <span id="session-length">{sessionLength}</span><span>:00</span>
             <button id="session-decrement" onClick={changeLength}><FaArrowDown /></button>
           </div>
         </div>
       </div>
-      <div className="timer debug2" id="timer-label">Session: {type}</div>
+      
       <div className="remainingTime">
-        <p className="debug">Remaining Time</p>
-        <div className="debug" id="time-left">{minutesDisplay}:{secondsDisplay}</div>
+
+        <h4 className="" id="timer-label">{type} Session Remaining Time:</h4>
+        <div className="" id="time-left">{minutesDisplay}:{secondsDisplay}</div>
         <audio id="beep" src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"></audio>
         <div className='controls'>
-          <button id="start_stop" onClick= {()=>setTimer(!timerOn)}>Pause/Start</button>
-          <button id="reset" onClick={reset}>Reset</button>
+          <button id="start_stop" onClick= {()=>setTimer(!timerOn)}>{timerOn?<FaPause />: <FaPlay /> }</button>
+          <button id="reset" onClick={reset}><FaHistory size={17}/></button>
         </div>
       </div>
+      <div className="author">
+        <p>a freeCodeCamp <span>
+          <FaFreeCodeCamp size={16} />
+        </span> ReactJS project </p>
+        <p>by Robert Lei</p>
+      </div>
+
+
       
     </div>
   )
